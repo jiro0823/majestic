@@ -14,9 +14,10 @@ class CustomerServicesView extends Component
     public $search;
     public $categories;
     public $categoryFilter = [];
-    public $sortByPrice = 'PriceLowToHigh';
+    public $sortByPrice = 'price';
+    public $sortDirection = 'asc'; // Add this line
 
-    public $sortDropDown;
+    public $sortDropDown  = 'PriceLowToHigh'; // Add this line
 
     private $services;
 
@@ -53,7 +54,10 @@ class CustomerServicesView extends Component
         // Determine whether to show category names in the URL or not
         $showCategoryNames = count($this->categoryFilter) <= 3;
 
-        $this->services = $query->orderBy($this->sortByPrice)->paginate(10);
+        // Order by the actual column name based on the user-friendly dropdown
+        $query->orderBy($this->sortByPrice, 'asc'); // Default to ascending order
+
+        $this->services = $query->paginate(10);
 
         return view('livewire.customer-services-view', [
             'services' => $this->services,
@@ -68,16 +72,31 @@ class CustomerServicesView extends Component
         $this->resetPage();
     }
 
-//    public function updatedCategoryFilter()
-//    {
-//        $this->render(); // Re-render the component
-//    }
+    //    public function updatedCategoryFilter()
+    //    {
+    //        $this->render(); // Re-render the component
+    //    }
+
+    public function updatedSortDropDown($value)
+    {
+        // Map user-friendly sort options to actual column names
+        $sortOptions = [
+            'PriceLowToHigh' => 'price',
+            'PriceHighToLow' => 'price',
+        ];
+
+        // Validate and set the sort column based on user selection
+        $this->sortByPrice = $sortOptions[$value] ?? 'price'; // Fallback to default if not found
+
+        // Set the order direction based on the selected option
+        $this->sortDirection = ($value == 'PriceLowToHigh') ? 'asc' : 'desc';
+    }
 
     public function sortByMostPopular($sort)
     {
         // validate $sort value to only be 'PriceLowToHigh' or 'PriceHighToLow'
 
-        if ( $sort == 'PriceLowToHigh' || $sort == 'PriceHighToLow' ) {
+        if ($sort == 'PriceLowToHigh' || $sort == 'PriceHighToLow') {
             $this->sortByPrice = $sort;
         } else {
             $this->sortByPrice = 'PriceLowToHigh';
@@ -89,5 +108,4 @@ class CustomerServicesView extends Component
 
         $this->render(); // Re-render the component
     }
-
 }

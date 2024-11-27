@@ -43,7 +43,7 @@ Route::middleware([
             'validateRole:Admin'
         ])->group(function () {
 
-            Route::prefix('manage')->group( function () {
+            Route::prefix('manage')->group(function () {
                 Route::resource('users', App\Http\Controllers\UserController::class)->name('index', 'manageusers');
                 Route::put('users/{id}/suspend', [App\Http\Controllers\UserSuspensionController::class, 'suspend'])->name('manageusers.suspend');
                 Route::put('users/{id}/activate', [App\Http\Controllers\UserSuspensionController::class, 'activate'])->name('manageusers.activate');
@@ -52,9 +52,6 @@ Route::middleware([
                     return view('dashboard.manage-locations.index');
                 })->name('managelocations');
             });
-
-
-
         });
 
         // middlleware to give access only for admin and employee
@@ -62,7 +59,7 @@ Route::middleware([
             'validateRole:Admin,Employee'
         ])->group(function () {
 
-            Route::prefix('manage')->group( function () {
+            Route::prefix('manage')->group(function () {
                 Route::get('services', function () {
                     return view('dashboard.manage-services.index');
                 })->name('manageservices');
@@ -73,7 +70,7 @@ Route::middleware([
 
                 Route::get('categories', function () {
                     return view('dashboard.manage-categories.index');
-                })->name('managecategories' );
+                })->name('managecategories');
 
                 Route::get('categories/create', function () {
                     return view('dashboard.manage-categories.index');
@@ -82,29 +79,29 @@ Route::middleware([
                 Route::get('appointments', function () {
                     return view('dashboard.manage-appointments.index');
                 })->name('manageappointments');
-            } );
+            });
 
 
 
             // analytics route group
-//            Route::prefix('analytics')->group(function () {
-//                Route::get('/', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('analytics');
-//                Route::get('/revenue', [App\Http\Controllers\AnalyticsController::class, 'revenue'])->name('analytics.revenue');
-//                Route::get('/appointments', [App\Http\Controllers\AnalyticsController::class, 'appointments'])->name('analytics.appointments');
-//                Route::get('/customers', [App\Http\Controllers\AnalyticsController::class, 'customers'])->name('analytics.customers');
-//                Route::get('/employees', [App\Http\Controllers\AnalyticsController::class, 'employees'])->name('analytics.employees');
-//                Route::get('/services', [App\Http\Controllers\AnalyticsController::class, 'services'])->name('analytics.services');
-//                Route::get('/locations', [App\Http\Controllers\AnalyticsController::class, 'locations'])->name('analytics.locations');
-//            });
-//                // graph route group
-//                Route::prefix('graph')->group(function () {
-//                    Route::get('/revenue', [App\Http\Controllers\GraphController::class, 'revenue'])->name('graph.revenue');
-//                    Route::get('/appointments', [App\Http\Controllers\GraphController::class, 'appointments'])->name('graph.appointments');
-//                    Route::get('/customers', [App\Http\Controllers\GraphController::class, 'customers'])->name('graph.customers');
-//                    Route::get('/employees', [App\Http\Controllers\GraphController::class, 'employees'])->name('graph.employees');
-//                    Route::get('/services', [App\Http\Controllers\GraphController::class, 'services'])->name('graph.services');
-//                    Route::get('/locations', [App\Http\Controllers\GraphController::class, 'locations'])->name('graph.locations');
-//                });
+            //            Route::prefix('analytics')->group(function () {
+            //                Route::get('/', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('analytics');
+            //                Route::get('/revenue', [App\Http\Controllers\AnalyticsController::class, 'revenue'])->name('analytics.revenue');
+            //                Route::get('/appointments', [App\Http\Controllers\AnalyticsController::class, 'appointments'])->name('analytics.appointments');
+            //                Route::get('/customers', [App\Http\Controllers\AnalyticsController::class, 'customers'])->name('analytics.customers');
+            //                Route::get('/employees', [App\Http\Controllers\AnalyticsController::class, 'employees'])->name('analytics.employees');
+            //                Route::get('/services', [App\Http\Controllers\AnalyticsController::class, 'services'])->name('analytics.services');
+            //                Route::get('/locations', [App\Http\Controllers\AnalyticsController::class, 'locations'])->name('analytics.locations');
+            //            });
+            //                // graph route group
+            //                Route::prefix('graph')->group(function () {
+            //                    Route::get('/revenue', [App\Http\Controllers\GraphController::class, 'revenue'])->name('graph.revenue');
+            //                    Route::get('/appointments', [App\Http\Controllers\GraphController::class, 'appointments'])->name('graph.appointments');
+            //                    Route::get('/customers', [App\Http\Controllers\GraphController::class, 'customers'])->name('graph.customers');
+            //                    Route::get('/employees', [App\Http\Controllers\GraphController::class, 'employees'])->name('graph.employees');
+            //                    Route::get('/services', [App\Http\Controllers\GraphController::class, 'services'])->name('graph.services');
+            //                    Route::get('/locations', [App\Http\Controllers\GraphController::class, 'locations'])->name('graph.locations');
+            //                });
 
 
         });
@@ -113,7 +110,7 @@ Route::middleware([
             'validateRole:Customer'
         ])->group(function () {
 
-            Route::prefix('cart')->group( function () {
+            Route::prefix('cart')->group(function () {
                 Route::get('/', [App\Http\Controllers\CartController::class, 'index'])->name('cart');
                 Route::post('/', [App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
                 Route::delete('/item/{cart_service_id}', [App\Http\Controllers\CartController::class, 'removeItem'])->name('cart.remove-item');
@@ -123,13 +120,13 @@ Route::middleware([
 
 
             // Get the appointments of the user
-//            Route::get('appointments', [App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments');
-//
-//            // View an appointment
-//            Route::get('appointments/{appointment_code}', [App\Http\Controllers\AppointmentController::class, 'show'])->name('appointments.show');
-//
-//            // Cancel an appointment
-//            Route::delete('appointments/{appointment_code}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('appointments.destroy');
+            //            Route::get('appointments', [App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments');
+            //
+            //            // View an appointment
+            //            Route::get('appointments/{appointment_code}', [App\Http\Controllers\AppointmentController::class, 'show'])->name('appointments.show');
+            //
+            //            // Cancel an appointment
+            //            Route::delete('appointments/{appointment_code}', [App\Http\Controllers\AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
 
 

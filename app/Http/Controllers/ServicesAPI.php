@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\UserRolesEnum;
 use App\Models\Service;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Str;
 
 class ServicesAPI extends Controller
 {
@@ -13,9 +14,11 @@ class ServicesAPI extends Controller
         $rateLimit = Limit::perMinute(10)->by(optional(auth()->user())->id ?: request()->ip());
 
         $queryHiddenData = false;
-        if (auth()->check() &&
+        if (
+            auth()->check() &&
             (auth()->user()->role->id == UserRolesEnum::Employee->value
-                || auth()->user()->role->id == UserRolesEnum::Admin->value)) {
+                || auth()->user()->role->id == UserRolesEnum::Admin->value)
+        ) {
             // No rate limit for Employee or Admin
             $rateLimit = Limit::none();
             $queryHiddenData = true;
@@ -30,7 +33,6 @@ class ServicesAPI extends Controller
         });
 
         return response()->json($services, 200);
-
     }
 
     public function show($id)
@@ -45,7 +47,7 @@ class ServicesAPI extends Controller
         request()->validate([
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-//            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric',
             'notes' => 'nullable|string|max:255',
             'allergens' => 'nullable|string|max:255',
@@ -72,10 +74,10 @@ class ServicesAPI extends Controller
 
 
         // slug
-        $slug = \Str::slug( request('name'));
-        $slugCount = Service::where('slug', 'like', $slug.'%')->count();
+        $slug = Str::slug(request('name'));
+        $slugCount = Service::where('slug', 'like', $slug . '%')->count();
         if ($slugCount > 0) {
-            $slug = $slug.'-'.($slugCount + 1);
+            $slug = $slug . '-' . ($slugCount + 1);
         }
 
 
@@ -83,7 +85,7 @@ class ServicesAPI extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'description' => request('description'),
-//            'image' => request('image'),  // image null
+            //            'image' => request('image'),  // image null
             'price' => request('price'),
             'notes' => request('notes'),
             'allergens' => request('allergens'),
@@ -130,5 +132,4 @@ class ServicesAPI extends Controller
         $service->delete();
         return response()->json("message': 'Service deleted successfully'", 200);
     }
-
 }

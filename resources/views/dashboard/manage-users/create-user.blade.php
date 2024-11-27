@@ -7,7 +7,7 @@
     </x-slot>
 
     <div>
-        <form action="{{ route('manageusers.store')}}" method="post" class="w-1/2 mx-auto bg-white rounded-lg p-5">
+        <form action="{{ route('manageusers.create')}}" method="post" class="w-1/2 mx-auto bg-white rounded-lg p-5">
             @csrf
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4 my-2">
@@ -15,7 +15,7 @@
                 <x-input id="name" type="text" class="mt-1 block w-full" name="name" />
                 <x-input-error for="name" class="mt-2" />
             </div>
-        
+
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4 my-2">
                 <x-label for="email" value="{{ __('Email') }}" />
@@ -34,7 +34,7 @@
             <!-- Password -->
             <div class="col-span-6 sm:col-span-4 my-2">
                 <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" type="password" class="mt-1 block w-full" name="password"/>
+                <x-input id="password" type="password" class="mt-1 block w-full" name="password" />
                 <x-input-error for="password" class="mt-2" />
             </div>
 
@@ -62,5 +62,5 @@
             </div>
         </form>
     </div>
-    
+
 </x-dashboard>
