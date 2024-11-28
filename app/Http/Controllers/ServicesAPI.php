@@ -47,7 +47,7 @@ class ServicesAPI extends Controller
         request()->validate([
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-            //            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric',
             'notes' => 'nullable|string|max:255',
             'allergens' => 'nullable|string|max:255',
@@ -85,7 +85,7 @@ class ServicesAPI extends Controller
             'name' => request('name'),
             'slug' => $slug,
             'description' => request('description'),
-            //            'image' => request('image'),  // image null
+            'image' => request('image'),  // image null
             'price' => request('price'),
             'notes' => request('notes'),
             'allergens' => request('allergens'),

@@ -5,9 +5,9 @@
             {{ __('Create User') }}
         </h2>
     </x-slot>
-
+    <!-- users.create -->
     <div>
-        <form action="{{ route('manageusers.create')}}" method="post" class="w-1/2 mx-auto bg-white rounded-lg p-5">
+        <form action="{{ route('users.store')}}" method="POST" class="w-1/2 mx-auto bg-white rounded-lg p-5">
             @csrf
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4 my-2">
@@ -56,7 +56,7 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <x-button class="ml-4">
+                <x-button class="ml-4" type="submit">
                     {{ __('Create User') }}
                 </x-button>
             </div>

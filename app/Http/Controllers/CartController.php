@@ -17,10 +17,10 @@ class CartController extends Controller
 
             ->first();
         return view('web.cart', compact('cart'));
-
     }
 
-    public function removeItem($cart_service_id) {
+    public function removeItem($cart_service_id)
+    {
         // Get the cart of the user that is not paid
         $cart = auth()->user()->cart()->where('is_paid', false)->first();
 
@@ -48,7 +48,8 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function checkout() {
+    public function checkout()
+    {
         // Get the cart of the user that is not paid
         $cart = auth()->user()->cart()->where('is_paid', false)->first();
 
@@ -61,7 +62,7 @@ class CartController extends Controller
 
         // a data structure to hold the date and the unavailable time slots
         $unavailable_time_slots = new Collection(
-           'array'
+            'array'
         );
 
         // check if the time slot is available
@@ -76,7 +77,7 @@ class CartController extends Controller
             // if the time slot is not available, redirect back
             if (!$is_available) {
                 $is_time_slots_available = false;
-//                dd($service->pivot->date, $service->pivot->time_slot_id);
+                //    dd($service->pivot->date, $service->pivot->time_slot_id);
                 // get the start and end time of the time slot into variables
                 $start_time = DB::table('time_slots')->where('id', $service->pivot->time_slot_id)->value('start_time');
                 $end_time = DB::table('time_slots')->where('id', $service->pivot->time_slot_id)->value('end_time');
@@ -85,13 +86,13 @@ class CartController extends Controller
                 $service_name = $service->name;
 
                 $unavailable_time_slots->add(
-                  [
+                    [
                         'service_name' => $service_name,
                         'date' => $service->pivot->date,
                         'start_time' => $start_time,
                         'end_time' => $end_time,
                         'location' => $service->pivot->location->name,
-                  ]
+                    ]
                 );
             }
         });
@@ -117,7 +118,7 @@ class CartController extends Controller
                 return redirect()->back();
             }
 
-           Appointment::create([
+            Appointment::create([
                 'cart_id' => $cart->id,
                 'user_id' => $cart->user_id,
                 'service_id' => $service->id,
@@ -127,7 +128,7 @@ class CartController extends Controller
                 'end_time' => $service->pivot->end_time,
                 'location_id' => $service->pivot->location_id,
                 'total' => $service->pivot->price,
-           ]);
+            ]);
         });
 
         $cart->is_paid = true;
@@ -137,12 +138,9 @@ class CartController extends Controller
         $appointments = Appointment::where('cart_id', $cart->id)->get();
         $customer = auth()->user();
         foreach ($appointments as $appointment) {
-            SendAppointmentConfirmationMailJob::dispatch( $customer , $appointment);
+            SendAppointmentConfirmationMailJob::dispatch($customer, $appointment);
         }
 
         return redirect()->route('dashboard')->with('success', 'Your appointment has been booked successfully');
-
     }
-
-
 }

@@ -12,7 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^2.11",
+        "livewire/livewire": "^2.12",
         "rappasoft/laravel-livewire-tables": "^2.14"
     },
     "require-dev": {

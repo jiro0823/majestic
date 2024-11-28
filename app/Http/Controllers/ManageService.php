@@ -13,8 +13,9 @@ class ManageService extends Controller
     public function index()
     {
         $services = Service::paginate(10);
-        
-        return view('dashboard.manage-services.index', 
+
+        return view(
+            'dashboard.manage-services.index',
             [
                 'services' => $services,
             ]

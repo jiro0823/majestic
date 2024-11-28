@@ -25,7 +25,7 @@ class DisplayService extends Controller
 
         $serviceQuery = Service::where('slug', $slug);
 
-        if (!auth()->check() || auth()->user()->role->id == UserRolesEnum::Customer->value)  {
+        if (!auth()->check() || auth()->user()->role->id == UserRolesEnum::Customer->value) {
             // If the user is not logged in or is a customer
             $serviceQuery->where('is_hidden', false);
         }
@@ -52,7 +52,7 @@ class DisplayService extends Controller
 
 
 
-        if( !auth()->check()  || auth()->user()->role->id ==  UserRolesEnum::Customer->value ) {
+        if (!auth()->check()  || auth()->user()->role->id ==  UserRolesEnum::Customer->value) {
             if ($service->is_hidden) {
                 abort(404);
             }
@@ -63,7 +63,6 @@ class DisplayService extends Controller
                 $service->id,
                 'view',
             );
-
         } else {
             // get the views for this service
             $views = $service->hits()->where('analytic_data_type', 'view')->count();
@@ -161,9 +160,6 @@ class DisplayService extends Controller
                     'count' => $item['count'],
                 ];
             });
-
-
-
         }
 
         return view('web.view-service', [
@@ -182,7 +178,7 @@ class DisplayService extends Controller
             'appointmentsLastWeek' => $appointmentsLastWeek,
             'appointmentsLastMonth' => $appointmentsLastMonth,
             'percentageAppointmentsChangeLastWeek' => $percentageAppointmentsChangeLastWeek,
-            'percentageAppointmentsChangeLastMonth'=> $percentageAppointmentsChangeLastMonth,
+            'percentageAppointmentsChangeLastMonth' => $percentageAppointmentsChangeLastMonth,
             'percentageRevenueChangeLastMonth' => $percentageRevenueChangeLastMonth,
         ]);
     }

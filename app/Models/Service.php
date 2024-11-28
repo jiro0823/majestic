@@ -28,6 +28,7 @@ class Service extends Model
         'notes',
         'allergens',
         'benefits',
+        
         'aftercare_tips',
         'cautions',
 //        'duration_minutes',
