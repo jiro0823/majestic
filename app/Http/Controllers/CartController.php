@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Darryldecode\Cart\Facades\CartFacade as Cart;
+
 use App\Jobs\SendAppointmentConfirmationMailJob;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Collection\Collection;
+//use App\Models\Cart;
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Models\CartItem;
+
 
 class CartController extends Controller
 {
@@ -13,16 +21,16 @@ class CartController extends Controller
     {
         // get the cart of the user that is not paid
         $cart = auth()->user()->cart()
-            ->where('is_paid', false)
-
+            ->where('is_paid', operator: false)
             ->first();
+
         return view('web.cart', compact('cart'));
     }
 
     public function removeItem($cart_service_id)
     {
         // Get the cart of the user that is not paid
-        $cart = auth()->user()->cart()->where('is_paid', false)->first();
+        $cart = auth()->user()->carts()->where('is_paid', false)->first();
 
         // If the cart is not found, redirect back
         if (!$cart) {
@@ -48,76 +56,36 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function checkout()
-    {
-        // Get the cart of the user that is not paid
-        $cart = auth()->user()->cart()->where('is_paid', false)->first();
 
-        // If the cart is not found, redirect back
-        if (!$cart) {
-            return redirect()->back();
-        }
+    
 
-        $is_time_slots_available = true;
+public function store(Request $request)
+{
 
-        // a data structure to hold the date and the unavailable time slots
-        $unavailable_time_slots = new Collection(
-            'array'
-        );
+    $product = Product::findOrFail($request->input('product_id'));
 
-        // check if the time slot is available
-        $cart->services->map(function ($service) use ($unavailable_time_slots, $cart, &$is_time_slots_available) {
-
-            $is_available = DB::table('appointments')
-                ->where('date', $service->pivot->date)
-                ->where('time_slot_id', $service->pivot->time_slot_id)
-                ->where('location_id', $service->pivot->location_id)
-                ->doesntExist();
-
-            // if the time slot is not available, redirect back
-            if (!$is_available) {
-                $is_time_slots_available = false;
-                //    dd($service->pivot->date, $service->pivot->time_slot_id);
-                // get the start and end time of the time slot into variables
-                $start_time = DB::table('time_slots')->where('id', $service->pivot->time_slot_id)->value('start_time');
-                $end_time = DB::table('time_slots')->where('id', $service->pivot->time_slot_id)->value('end_time');
-
-                // service name
-                $service_name = $service->name;
-
-                $unavailable_time_slots->add(
-                    [
-                        'service_name' => $service_name,
-                        'date' => $service->pivot->date,
-                        'start_time' => $start_time,
-                        'end_time' => $end_time,
-                        'location' => $service->pivot->location->name,
-                    ]
-                );
-            }
-        });
-
-        // if the time slot is not available, redirect back
-        if (!$is_time_slots_available) {
-            // return with a session message
-
-            return redirect()->back()->with('unavailable_time_slots', $unavailable_time_slots);
-        }
+    Cart::add([
+        'id' => $product->id,
+        'name' => $product->name,
+        'price' => $product->price,
+        'quantity' => 1,
+    ]);
+}
 
 
-        $cart->services->map(function ($service) use ($cart) {
 
-            $is_available = DB::table('appointments')
-                ->where('date', $service->pivot->date)
-                ->where('time_slot_id', $service->pivot->time_slot_id)
-                ->where('location_id', $service->pivot->location_id)
-                ->doesntExist();
+   public function checkout()
+{
+    // Get the unpaid cart for the authenticated user
+    $cart = auth()->user()->cart()->where('is_paid', false)->first();
 
-            // if the time slot is not available, redirect back
-            if (!$is_available) {
-                return redirect()->back();
-            }
+    if (!$cart) {
+        return redirect()->back()->with('error', 'No items in the cart.');
+    }
 
+    DB::transaction(function () use ($cart) {
+        // Process services and create appointments
+        foreach ($cart->services as $service) {
             Appointment::create([
                 'cart_id' => $cart->id,
                 'user_id' => $cart->user_id,
@@ -129,18 +97,14 @@ class CartController extends Controller
                 'location_id' => $service->pivot->location_id,
                 'total' => $service->pivot->price,
             ]);
-        });
-
-        $cart->is_paid = true;
-        $cart->save();
-
-        // get the appointments of the cart
-        $appointments = Appointment::where('cart_id', $cart->id)->get();
-        $customer = auth()->user();
-        foreach ($appointments as $appointment) {
-            SendAppointmentConfirmationMailJob::dispatch($customer, $appointment);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Your appointment has been booked successfully');
-    }
+        // Mark the cart as paid
+        $cart->is_paid = true;
+        $cart->save();
+    });
+
+    return redirect()->route('dashboard')->with('success', 'Checkout completed successfully!');
+}
+
 }

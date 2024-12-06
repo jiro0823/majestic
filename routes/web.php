@@ -2,8 +2,19 @@
 
 use App\Enums\UserRolesEnum;
 use App\Models\Role;
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CrewController;
+use App\Http\Controllers\DisplayStore;
+use App\Http\Controllers\CartController;
+use App\Http\Livewire\StoreSection;
+use App\Http\Controllers\ProductCartController;
+use App\Http\Controllers\ProductStoreController;
+
+  
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +31,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomePageController::class, 'index'])->name('home');
 
-
 Route::get('/services', [App\Http\Controllers\DisplayService::class, 'index'])->name('services');
 Route::get('/services/{slug}', [App\Http\Controllers\DisplayService::class, 'show'])->name('view-service');
 
 // Route::get('/services/{id}', [App\Http\Controllers\ServiceDisplay::class, 'show'])->name('services.show');
 Route::get('/deals', [App\Http\Controllers\DisplayDeal::class, 'index'])->name('deals');
+Route::get('/crew', [App\Http\Controllers\DisplayCrew::class, 'index'])->name('crew');
+
+Route::get('/store', StoreSection::class)->name('store');
+
+
+
 
 
 // Users needs to be logged in for these routes
@@ -116,9 +132,13 @@ Route::middleware([
                 Route::delete('/item/{cart_service_id}', [App\Http\Controllers\CartController::class, 'removeItem'])->name('cart.remove-item');
                 Route::delete('/{id}', [App\Http\Controllers\CartController::class, 'destroy'])->name('cart.destroy');
                 Route::post('/checkout', [App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
+                Route::post('/cart/product/{product_id}/add',[App\Http\Controllers\ProductController::class, 'addProductToCart'])->name('cart.addProduct');
+                Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+                Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
             });
 
-
+            
             // Get the appointments of the user
             //            Route::get('appointments', [App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments');
             //

@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Cart;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -67,8 +67,15 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    function cart() {
-        return $this->hasOne(Cart::class);
+    public function productCart()
+    {
+        return $this->hasOne(ProductCart::class);
     }
+
+    public function serviceCart()
+    {
+        return $this->hasOne(ServiceCart::class);
+    }
+
 }
 

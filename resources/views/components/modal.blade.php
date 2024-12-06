@@ -1,3 +1,4 @@
+
 @props(['id', 'maxWidth'])
 
 @php

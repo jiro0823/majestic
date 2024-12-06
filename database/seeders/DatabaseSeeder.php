@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Enums\UserRolesEnum;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Seeder\Product;
 
 class DatabaseSeeder extends Seeder
 {
@@ -155,6 +156,11 @@ class DatabaseSeeder extends Seeder
             TimeSlotSeeder::class,
         ]);
 
+        \App\Models\Product::create([
+            'name' => 'Product 1',
+            'price' => 100.00,
+            'inventory' => 50,
+        ]); 
 
     }
 }

@@ -107,6 +107,32 @@
             </fieldset>
         </div>
 
+        <div class="mt-5">
+            <h4 class="text-sm font-medium text-gray-900">Select Barber</h4>
+            <fieldset class="mt-4" x-data="{ barbers: @entangle('barbers'), selectedBarber: @entangle('selectedBarber').defer }">
+                <legend class="sr-only">Choose your Barber</legend>
+                <div class="grid grid-cols-3 gap-4">
+                    @foreach($barbers as $barber)
+                        <label wire:key="barber-{{ $barber->id }}"
+                            class="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium text-gray-800 uppercase cursor-pointer shadow-sm"
+                            x-bind:class="{
+                                'bg-pink-500 text-white': selectedBarber === {{ $barber->id }},
+                                'bg-gray-50 hover:bg-pink-100': selectedBarber !== {{ $barber->id }}
+                            }"
+                        >
+                            <input type="radio" name="barber-choice"
+                                   value="{{ $barber->id }}" class="sr-only"
+                                   x-on:change="selectedBarber = {{ $barber->id }}">
+
+                            <span>{{ $barber->name }}</span>
+                            <span class="pointer-events-none absolute -inset-px rounded-md"
+                                  aria-hidden="true"></span>
+                        </label>
+                    @endforeach
+                </div>
+            </fieldset>
+        </div>
+
         <button type="submit"
                 class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 px-8 py-3 text-base font-medium text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             Add to cart

@@ -144,7 +144,7 @@
                             <x-dropdown-link href="">
                                 {{ __('Booking') }}
                             </x-dropdown-link>
-                            <x-dropdown-link href="">
+                            <x-dropdown-link href="{{ route('dashboard')}}">
                                 {{ __('My Appointments') }}
                             </x-dropdown-link>
 
@@ -208,7 +208,11 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="#">
-                {{ __('Deals') }}
+                {{ __('Crew') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="#">
+                {{ __('Store') }}
             </x-responsive-nav-link>
 
 

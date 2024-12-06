@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
-
+use App\Models\Cart;
 use App\Models\Appointment;
 use App\Models\Location;
 use App\Models\Service;

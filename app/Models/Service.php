@@ -79,6 +79,12 @@ class Service extends Model
             ->withPivot('location_id');
     }
 
+    public function services()
+{
+    return $this->belongsToMany(Service::class, 'cart_service')
+                ->withPivot('time_slot_id', 'date', 'start_time', 'end_time', 'location_id', 'price');
+}
+
     protected static function booted()
     {
 //        static::creating(function ($service) {
