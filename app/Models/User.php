@@ -66,16 +66,9 @@ class User extends Authenticatable
     function role() {
         return $this->belongsTo(Role::class);
     }
-
-    public function productCart()
+    public function cart()
     {
-        return $this->hasOne(ProductCart::class);
+        return $this->hasOne(Cart::class);  // Assuming each user can have one cart
     }
-
-    public function serviceCart()
-    {
-        return $this->hasOne(ServiceCart::class);
-    }
-
 }
 

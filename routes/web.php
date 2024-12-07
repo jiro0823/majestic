@@ -11,10 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Livewire\StoreSection;
 use App\Http\Controllers\ProductCartController;
 use App\Http\Controllers\ProductStoreController;
-
-  
-
-
+use App\Http\Livewire\Crew;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,10 +33,10 @@ Route::get('/services/{slug}', [App\Http\Controllers\DisplayService::class, 'sho
 
 // Route::get('/services/{id}', [App\Http\Controllers\ServiceDisplay::class, 'show'])->name('services.show');
 Route::get('/deals', [App\Http\Controllers\DisplayDeal::class, 'index'])->name('deals');
-Route::get('/crew', [App\Http\Controllers\DisplayCrew::class, 'index'])->name('crew');
+//Route::get('/crew', [App\Http\Controllers\DisplayCrew::class, 'index'])->name('crew');
 
 Route::get('/store', StoreSection::class)->name('store');
-
+Route::get('/crew', Crew::class)->name('crew');
 
 
 

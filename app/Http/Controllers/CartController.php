@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Darryldecode\Cart\Facades\CartFacade as Cart;
 
-use App\Jobs\SendAppointmentConfirmationMailJob;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Collection\Collection;
-//use App\Models\Cart;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Request;
 use App\Models\CartItem;
 
 
@@ -55,24 +53,6 @@ class CartController extends Controller
 
         return redirect()->back();
     }
-
-
-    
-
-public function store(Request $request)
-{
-
-    $product = Product::findOrFail($request->input('product_id'));
-
-    Cart::add([
-        'id' => $product->id,
-        'name' => $product->name,
-        'price' => $product->price,
-        'quantity' => 1,
-    ]);
-}
-
-
 
    public function checkout()
 {

@@ -361,3 +361,5 @@ If you have any suggestions create an issue on the repository.
 "# blissNbliss" 
 "# bladeNbliss" 
 "# blissNblade" 
+"# BLISS-SALON" 
+"# BLISS-SALON" 
