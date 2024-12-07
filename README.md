@@ -364,3 +364,4 @@ If you have any suggestions create an issue on the repository.
 "# BLISS-SALON" 
 "# BLISS-SALON" 
 "# SALON-SYSTEM" 
+"# majestic" 
