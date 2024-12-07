@@ -365,3 +365,4 @@ If you have any suggestions create an issue on the repository.
 "# BLISS-SALON" 
 "# SALON-SYSTEM" 
 "# majestic" 
+"# majestic" 
